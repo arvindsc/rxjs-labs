@@ -1,2 +1,2 @@
-import { multicastClass } from "./multicastObservables";
-//multicastClass;
+import { Loader } from "./loading/loader";
+const loader = new Loader();
