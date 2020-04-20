@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "multi": "^0.1.3",
     "parcel-bundler": "^1.12.3",
     "rxjs": "^6.5.5"
   },
