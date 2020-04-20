@@ -1,5 +1,34 @@
+/**
+ * 
+            *  .----. .---. .-. .-.  .--.  .----. .----.
+            { {__  /  ___}| {_} | / {} \ | {}  }| {_  
+            .-._} }\     }| { } |/  /\  \| .-. \| {__ 
+            `----'  `---' `-' `-'`-'  `-'`-' `-'`----'
+
+ *                  ----------------
+ *                 |    interval$    |
+ *                  ----------------
+ *                          | 
+ *                          V
+ *                  ----------------------
+ *                 | mergeMapTo[request]  |
+ *                  ----------------------    
+ *                          |
+ *                          V
+ *                  ----------------
+ *                 |    share()     |
+ *                  ----------------           
+ *                          |
+ *          -------------------------------------
+ *          |                 |                 |
+ *          V                 V                 v
+ *      -----------        ----------       ----------
+ *     | Observer |        | Observer |     | Observer |       
+ *      ----------          ----------       ----------
+ */
+
 import { Subject, interval } from "rxjs";
-import { tap, multicast, refCount } from "rxjs/operators";
+import { tap, multicast, refCount, share } from "rxjs/operators";
 export const multicastClass = (function () {
   const observer = {
     next: (value) => console.log("next:", value), //?
@@ -11,8 +40,13 @@ export const multicastClass = (function () {
     tap((i) => console.log(`Interval  ${i}`))
   );
   const multicastedInterval$ = interval$.pipe(
-    multicast(() => new Subject()),
-    refCount()
+    /*
+        multicast(() => new Subject()),
+        refCount()
+        // We can perform one more optimazation to remove this two operator with a single operator.
+        // share() internally do the same thing.
+    */
+    share()
   );
 
   // You don't need to unsubscribe manually because refCount is internally doing this for you.
